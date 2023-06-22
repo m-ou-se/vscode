@@ -606,6 +606,49 @@ registerAction2(class InterruptNotebook extends CancelNotebook {
 	}
 });
 
+registerAction2(class InterruptNotebook extends CancelNotebook {
+	constructor() {
+		super({
+			id: INTERRUPT_NOTEBOOK_COMMAND_ID,
+			title: {
+				value: localize('notebookActions.interruptNotebook', "Interrupt"),
+				original: 'Interrupt'
+			},
+			icon: icons.stopIcon,
+			precondition: ContextKeyExpr.and(
+				NOTEBOOK_HAS_SOMETHING_RUNNING,
+				NOTEBOOK_INTERRUPTIBLE_KERNEL),
+			menu: [
+				{
+					id: MenuId.EditorTitle,
+					order: -1,
+					group: 'navigation',
+					when: ContextKeyExpr.and(
+						NOTEBOOK_IS_ACTIVE_EDITOR,
+						NOTEBOOK_HAS_SOMETHING_RUNNING,
+						NOTEBOOK_INTERRUPTIBLE_KERNEL,
+						ContextKeyExpr.notEquals('config.notebook.globalToolbar', true)
+					)
+				},
+				{
+					id: MenuId.NotebookToolbar,
+					order: -1,
+					group: 'navigation/execute',
+					when: ContextKeyExpr.and(
+						NOTEBOOK_HAS_SOMETHING_RUNNING,
+						NOTEBOOK_INTERRUPTIBLE_KERNEL,
+						ContextKeyExpr.equals('config.notebook.globalToolbar', true)
+					)
+				},
+				{
+					id: MenuId.InteractiveToolbar,
+					group: 'navigation/execute'
+				}
+			]
+		});
+	}
+});
+
 
 registerAction2(class RevealRunningCellAction extends NotebookAction {
 	constructor() {
